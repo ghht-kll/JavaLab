@@ -1,0 +1,82 @@
+@startuml
+class App{
+    +CLEARED_ROWS: int
+    +GAME_NUMBER: int
+    +TILE_SIZE: int 
+    +GRID_WIDTH: int 
+    +GRID_HEIGHT: int 
+    -time: double
+    -g: GraphicsContext
+    -grid: int[][] 
+    -original: List<Tetromino>
+    -tetrominos: List<Tetromino>
+    -selected: Tetromino
+
+    -createContent(): Parent
+    -update(): void
+    -render(): void
+    -placePiece(Piece piece): void
+    -removePiece(Piece piece): void
+    -isOffscreen(Piece piece): boolean
+    -makeMove(Consumer<Tetromino> onSuccess, Consumer<Tetromino> onFail, boolean endMove): void
+    -isValidState(): void
+    -sweep(): void
+    -sweepRows(): List<Integer>
+    -spawn(): void
+    -drawPieces(): void
+    -loadData(): void
+    +start(Stage stage): void
+    +main(String[] args): void
+}
+
+class Tetromino{
+    +TILE_SIZE: int
+    +GRID_WIDTH: int
+    +GRID_HEIGHT: int
+    +x: int
+    +y: int
+    +pieces: List<Piece>
+
+    +Tetromino(Piece... pieces)
+    +move(int dx, int dy): void
+    +move(Direction direction): void
+    +draw(GraphicsContext g): void
+    +rotateBack(): void
+    +rotate(): void
+    +detach(int x, int y): void
+    +copy(): Tetromino
+}
+
+enum Direction{
+    UP(0, -1)
+    RIGHT(1, 0)
+    DOWN(0, 1)
+    LEFT(-1, 0)
+
+    -x: int
+    -y: int
+
+    -Direction(int x, int y)
+    +prev(): Direction
+    +next(): Direction
+}
+
+class Piece{
+    +distance: int
+    +directions: List<Direction> 
+    +parent: Tetromino
+    +x: int
+    +y: int
+
+    +Piece(int distance, Direction... direction)
+    +setParent(Tetromino parent): void
+    +setDirection(Direction... direction): void
+    +copy(): Piece
+}
+
+App --> Tetromino
+Tetromino --> Piece
+Piece --> Direction
+Piece --> Tetromino
+
+@enduml
